@@ -15,7 +15,7 @@ class Cliente(Thread):
             self.conn.send('hola')
             for i in clientes:
                 if i != self.conn:
-                    i.send(self.data[5:])
+                    i.send(self.addr[0]+' dice: '+self.data)
             #try:
             #    input_data=self.conn.recv(1024)
             #except error:
