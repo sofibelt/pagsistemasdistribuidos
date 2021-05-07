@@ -1,9 +1,15 @@
 from Tkinter import *
+import socket
+
 def enviar():
     #conn.send(text_ent.get())
-    print(text_ent.get())
+    #print(text_ent.get())
+    s.send(text_ent.get())
+    print(s.recv(1024))
 	#text_ent.delete(0, END)
 
+s = socket.socket()
+s.connect(("localhost", 8001))
 
 root = Tk()
 miFrame=Frame(root, width=500, height=400)
