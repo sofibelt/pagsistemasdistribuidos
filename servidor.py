@@ -11,11 +11,11 @@ class Cliente(Thread):
         self.data=''
     def run(self):
         while True:
-            self.data=self.conn.recv(1024)
-            self.conn.send('hola')
+            self.data=self.conn.recv(1024)#se recibe un mensaje
+            #self.conn.send('hola')
             for i in clientes:
                 if i != self.conn:
-                    i.send(self.addr[0]+' dice: '+self.data)
+                    i.send(self.addr[0]+' dice: '+self.data)#se reenvia un mensaje a todos los otros usuarios
             #try:
             #    input_data=self.conn.recv(1024)
             #except error:
