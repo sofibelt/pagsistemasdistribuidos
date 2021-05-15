@@ -45,7 +45,7 @@ class Sala:
     def escribir(self,texto):
         self.textarea.insert(END, texto)
     def cambiarventana(self,nombre):
-        self.textarea.insert(END, 'ha ingresado a la nueva sala')
+        self.miLabel['text'] = nombre
 
 
 
@@ -62,7 +62,8 @@ class leer(Thread):
                 #ventana.miFrame.quit()
                 #self.conn.send('END')
                 #self.parar()
-                ventana.cambiarventana('nueva ventana')
+                ventana.cambiarventana(self.mensaje[4::])
+                ventana.escribir('ha cambiado a una nueva sala \n')
             else:
                 ventana.escribir(self.mensaje+'\n')
         self.conn.close()
