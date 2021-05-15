@@ -9,11 +9,11 @@ def escribir(texto):
 	textarea.insert(END, texto)
 
 def crear():
-    root=Tk()
-    root.title("pagina 1")
-    root.geometry('500x500')
-    root.configure(background='blue')
-
+    root2=Tk()
+    root2.title("pagina 1")
+    root2.geometry('500x500')
+    root2.configure(background='blue')
+    root2.mainloop()
 
 
 class leer(Thread):
@@ -26,11 +26,14 @@ class leer(Thread):
         while (self.stop == False):
             self.mensaje = self.conn.recv( 1024 )
             if self.mensaje[0]=='#' and self.mensaje[1]=='c' and self.mensaje[2]=='R':
-                pass
+                self.conn.send('END')
+                self.parar()
+                miFrame.quit()
             else:
-                #print(self.mensaje)
                 escribir(self.mensaje+'\n')
-	    #self.conn.close()
+        self.conn.close()
+        crear()
+
     def parar(self):
         self.stop = True
 
@@ -73,9 +76,6 @@ s.connect(("localhost", 8001))#conectamos el socket
 
 lee=leer(s)#se crea un objeto de la clase leer
 lee.start()
-
-
-
 
 
 root.mainloop()

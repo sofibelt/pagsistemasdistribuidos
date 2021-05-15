@@ -2,32 +2,31 @@
 import socket
 from threading import Thread
 
-clientes=[]
+clientes=[[],[],[],[]]
 class Cliente(Thread):
     def __init__(self,conn,addr):
         Thread.__init__(self)
         self.conn=conn
         self.addr=addr
         self.data=''
+        self.sala=0
     def run(self):
         while True:
             self.data=self.conn.recv(1024)#se recibe un mensaje
-            #self.conn.send('hola')
-            if self.data[0]!='#':
-                for i in clientes:
+            if self.data=='END':
+                self.conn.send(" ")
+                clientes.remove(self.conn)
+                break
+            elif self.data[0]!='#':
+                for i in clientes[self.sala]:
                     if i != self.conn:
                         i.send(self.addr[0]+' dice: '+self.data)#se reenvia un mensaje a todos los otros usuarios
             else:
                 if self.data[1]=='c' and self.data[2]=='R':
+                    self.sala+=1
+                    clientes[self.sala].append(self.conn)
                     self.conn.send(self.data)
-            #try:
-            #    input_data=self.conn.recv(1024)
-            #except error:
-            #    print("[%s] Error de lectura." % self.name)
-            #    break
-            #else:
-            #    mensaje=str(addr)+' a entrado en el chat'
-            #    self.conn.send(mensaje)
+        self.conn.close()
 
 Mi_socket=socket.socket()
 Mi_socket.bind(("localhost", 8001))
@@ -36,18 +35,6 @@ print ("Soy el servido, vamos a intercambiar mensajes!!!!!")
 while True:
     cli, addr=Mi_socket.accept()
     print("%s:%d se ha conectado." % addr)
-    clientes.append(cli)
+    clientes[0].append(cli)
     c=Cliente(cli,addr)
     c.start()
-
-#recibido = cli.recv(1024)
-#print("conectado: "+recibido)
-#mensaje=""
-#mensaje+="BIENVENIDO: "+str(recibido)+'\n'
-#mensaje+="tu ip es: "+str(addr[0])+'\n'
-#mensaje+="tu puerto es: "+ str(addr[1])+'\n'
-#mensaje+="te conectaste a las: "+ str(time.strftime(' %H:%M:%S', time.localtime()))+'\n'
-#mensaje+="el dia: "+ str(time.strftime('%Y-%m-%d ', time.localtime()))+'\n'
-#cli.send(mensaje)
-#cli.close()
-#Mi_socket.close()

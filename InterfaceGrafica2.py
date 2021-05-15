@@ -44,6 +44,9 @@ class Sala:
         self.text_ent.delete(0, END)
     def escribir(self,texto):
         self.textarea.insert(END, texto)
+    def cambiarventana(self,nombre):
+        self.textarea.insert(END, 'ha ingresado a la nueva sala')
+
 
 
 class leer(Thread):
@@ -55,15 +58,30 @@ class leer(Thread):
     def run(self):
         while (self.stop == False):
             self.mensaje = self.conn.recv( 1024 )
-            ventana.escribir(self.mensaje+'\n')
-	    #self.conn.close()
+            if self.mensaje[0]=='#' and self.mensaje[1]=='c' and self.mensaje[2]=='R':
+                #ventana.miFrame.quit()
+                #self.conn.send('END')
+                #self.parar()
+                ventana.cambiarventana('nueva ventana')
+            else:
+                ventana.escribir(self.mensaje+'\n')
+        self.conn.close()
+
     def parar(self):
         self.stop = True
 
 
 
+
+def crear():
+    root2=Tk()
+    root2.title("pagina 1")
+    root2.geometry('500x500')
+    root2.configure(background='blue')
+    root2.mainloop()
+
 soc = socket.socket()#creamos el socket
-soc.connect(("localhost", 8002))#conectamos el socket
+soc.connect(("localhost", 8001))#conectamos el socket
 lee=leer(soc)
 lee.start()
 root2 = Tk()#ventana
