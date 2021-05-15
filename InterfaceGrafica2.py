@@ -12,7 +12,7 @@ class Sala:
         #Establecer la ventana
         self.miFrame=Frame(root, width=500, height=400)#ventana medidas
         self.miFrame.pack()#ventana
-        self.miLabel=Label(self.miFrame ,text="Cliente chat")#ventana
+        self.miLabel=Label(self.miFrame ,text='Sala_principal')#ventana
 
         self.textarea = Text(self.miFrame, height=20, width=40)#ventana
         self.scroll = Scrollbar(self.miFrame, command=self.textarea.yview)#ventana
@@ -63,7 +63,19 @@ class leer(Thread):
                 #self.conn.send('END')
                 #self.parar()
                 ventana.cambiarventana(self.mensaje[4::])
-                ventana.escribir('ha cambiado a una nueva sala \n')
+                ventana.escribir('ha creado una nueva sala \n')
+            elif self.mensaje[0]=='#' and self.mensaje[1]=='g' and self.mensaje[2]=='R':
+                ventana.cambiarventana(self.mensaje[4::])
+                ventana.escribir('ha entrado a una nueva sala \n')
+            elif self.mensaje[0]=='#' and self.mensaje[1]=='e' and self.mensaje[2]=='R':
+                if self.mensaje[4::]=='cambio':
+                    ventana.cambiarventana('Sala_principal')
+                    ventana.escribir('ha salido de la nueva sala y a entrado en la comun \n')
+            elif self.mensaje[0]=='#' and self.mensaje[1::]=='exit':
+                ventana.miFrame.quit()
+                self.parar()
+            elif self.mensaje[0]=='#' and self.mensaje[1]=='I' and self.mensaje[2]=='R':
+                ventana.escribir(self.mensaje+'\n')
             else:
                 ventana.escribir(self.mensaje+'\n')
         self.conn.close()
