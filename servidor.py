@@ -58,7 +58,7 @@ class Cliente(Thread):
 
 def main():
     Mi_socket=socket.socket()
-    Mi_socket.bind(("localhost", 8001))
+    Mi_socket.bind((https://sistemasdistribuidosserver.herokuapp.com/,80))
     Mi_socket.listen(1)
     print ("Soy el servido, vamos a intercambiar mensajes!!!!!")
     while True:
