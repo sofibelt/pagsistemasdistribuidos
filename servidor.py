@@ -13,33 +13,35 @@ class Cliente(Thread):
     def run(self):
         while True:
             self.data=self.conn.recv(1024)#se recibe un mensaje
-
+            print('ha dicho: '+self.data.decode())
+            self.data=self.data.decode()
             if self.data[0]!='#':
                 for i in clientes[self.sala]:
                     if i != self.conn:
-                        i.send(self.addr[0]+' dice: '+self.data)#se reenvia un mensaje a todos los otros usuarios
+                        mensaje=self.addr[0]+' dice: '+self.data
+                        i.send(mensaje.encode())#se reenvia un mensaje a todos los otros usuarios
             else:
                 if self.data[1]=='c' and self.data[2]=='R':
                     clientes[self.sala].remove(self.conn)
                     self.sala=self.data[4::]
                     clientes[self.sala]=[self.conn]
-                    self.conn.send(self.data)
+                    self.conn.send(self.data.encode())
                 elif self.data[1]=='g' and self.data[2]=='R':
                     clientes[self.sala].remove(self.conn)
                     self.sala=self.data[4::]
                     clientes[self.sala].append(self.conn)
-                    self.conn.send(self.data)
+                    self.conn.send(self.data.encode())
                 elif self.data[1]=='e' and self.data[2]=='R':
                     if 'Sala_principal'!=self.sala:
                         clientes[self.sala].remove(self.conn)
                         self.sala='Sala_principal'
                         clientes[self.sala].append(self.conn)
                         self.data+=' cambio'
-                        self.conn.send(self.data)
+                        self.conn.send(self.data.encode())
                     else:
-                        self.conn.send(self.data)
+                        self.conn.send(self.data.encode())
                 elif self.data[1::]=='exit':
-                    self.conn.send("#exit")
+                    self.conn.send("#exit".encode())
                     clientes[self.sala].remove(self.conn)
                     break
                 elif self.data[1]=='I' and self.data[2]=='R':
@@ -50,7 +52,7 @@ class Cliente(Thread):
                         for j in clientes[i]:
                             Info+=str(j)
                             Info+=' , \n'
-                    self.conn.send(Info)
+                    self.conn.send(Info.encode())
 
         self.conn.close()
 

@@ -1,4 +1,4 @@
-from Tkinter import *
+from tkinter import *
 from threading import Thread
 import socket
 
@@ -40,7 +40,7 @@ class Sala:
 
 
     def enviar(self):
-        self.socket.send(self.text_ent.get())
+        self.socket.send(self.text_ent.get().encode())
         self.text_ent.delete(0, END)
     def escribir(self,texto):
         self.textarea.insert(END, texto)
@@ -58,6 +58,7 @@ class leer(Thread):
     def run(self):
         while (self.stop == False):
             self.mensaje = self.conn.recv( 1024 )
+            self.mensaje=self.mensaje.decode()
             if self.mensaje[0]=='#' and self.mensaje[1]=='c' and self.mensaje[2]=='R':
                 #ventana.miFrame.quit()
                 #self.conn.send('END')
