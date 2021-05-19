@@ -1,1 +1,1 @@
-web: gunicorn run servidor.py
+web: gunicorn  servidor:main

@@ -56,13 +56,20 @@ class Cliente(Thread):
 
         self.conn.close()
 
-Mi_socket=socket.socket()
-Mi_socket.bind(("localhost", 8001))
-Mi_socket.listen(1)
-print ("Soy el servido, vamos a intercambiar mensajes!!!!!")
-while True:
-    cli, addr=Mi_socket.accept()
-    print("%s:%d se ha conectado." % addr)
-    clientes['Sala_principal'].append(cli)
-    c=Cliente(cli,addr)
-    c.start()
+def main():
+    Mi_socket=socket.socket()
+    Mi_socket.bind(("localhost", 8001))
+    Mi_socket.listen(1)
+    print ("Soy el servido, vamos a intercambiar mensajes!!!!!")
+    while True:
+        cli, addr=Mi_socket.accept()
+        print("%s:%d se ha conectado." % addr)
+        clientes['Sala_principal'].append(cli)
+        c=Cliente(cli,addr)
+        c.start()
+
+
+
+
+if __name__ == "__main__":
+    main()
